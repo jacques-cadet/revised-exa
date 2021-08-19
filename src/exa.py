@@ -37,7 +37,7 @@ REGISTERS = [
 ]
 
 
-class ExaError(SyntaxError):
+class EXAError(SyntaxError):
     pass
 
 
