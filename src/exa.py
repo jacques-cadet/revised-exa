@@ -39,7 +39,6 @@ class EXAError(SyntaxError):
 
 
 class State:
-
     def __init__(self):
         self._registry = {
             register: 0 for register in REGISTERS
@@ -88,7 +87,6 @@ class State:
 
 
 class Statement:
-
     _exp_val = 3
 
     def __init__(self, data):
@@ -114,7 +112,6 @@ got {num_of_val} instead'
 
 
 class MathStatement(Statement):
-
     def __init__(self, data):
         super().__init__(data)
         (
@@ -156,7 +153,6 @@ class MODI(MathStatement):
 
 
 class COPY(Statement):
-
     _exp_val = 2
 
     def __init__(self, data):
@@ -217,7 +213,6 @@ class TEST(Statement):
 
 
 class MARK(Statement):
-
     _exp_val = 1
 
     def __init__(self, data):
@@ -230,7 +225,6 @@ class MARK(Statement):
 
 
 class JUMP(Statement):
-
     _exp_val = 1
 
     def __init__(self, data):
@@ -287,7 +281,6 @@ class DROP(Statement):
 
 
 class Parser:
-
     def __init__(self, file):
         self.file = file
         self.code = self.parse()
@@ -323,7 +316,6 @@ is not a valid exa register or value"
 
 
 class Interpreter:
-
     _commands = {cmd: eval(cmd) for cmd in COMMANDS}
 
     def __init__(self, filename):
