@@ -333,7 +333,6 @@ class Interpreter:
         self.filename = filename
         self.state = State()
 
-
     def run(self):
         parsed = Parser(self.filename)
         program = [self._commands[data[1]](data) for data in parsed.code]
