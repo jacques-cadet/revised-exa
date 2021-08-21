@@ -55,7 +55,7 @@ class State:
 
     def __repr__(self):
         return f"<Registers: T = {self.T:5,} | X = {self.X:5,}>"
-
+ 
     def store(self, register, value):
         self._registry[register] = value
 
@@ -289,7 +289,6 @@ class DROP(Statement):
 
 
 class Parser:
-    """ Parse file and check data"""
 
     def __init__(self, file):
 
@@ -332,20 +331,18 @@ class Interpreter:
 
     def __init__(self, filename):
         self.filename = filename
+        self.state = State()
 
     def run(self):
-        state = State()
-        p = Parser(self.filename)
-
-        program = [self._commands[data[1]](data) for data in p.code]
+        parsed = Parser(self.filename)
+        program = [self._commands[data[1]](data) for data in parsed.code]
 
         lines = len(program)
 
         while True:
-            if state._next_statement == lines:
+            if self.state._next_statement == lines:
                 break
+            stmt = program[self.state._next_statement]
+            stmt.do(self.state)
 
-            stmt = program[state._next_statement]
-            stmt.do(state)
-
-        return state
+        return self.state
