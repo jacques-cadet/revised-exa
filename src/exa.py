@@ -1,7 +1,4 @@
-
-# import os
 import operator as ops
-
 
 FILES = {
     '100': list(range(1, 20)),
@@ -42,8 +39,6 @@ class EXAError(SyntaxError):
 
 
 class State:
-    """ Return the state of the EXA registers
-    """
 
     def __init__(self):
 
@@ -60,7 +55,7 @@ class State:
 
     def __repr__(self):
         return f"<Registers: T = {self.T:5,} | X = {self.X:5,}>"
-
+ 
     def store(self, register, value):
         self._registry[register] = value
 
@@ -103,6 +98,11 @@ class Statement:
             error = f'Expected {self._exp_val} values, \
 got {num_of_val} instead'
             raise RuntimeError(error)
+        (
+            self.line,
+            self.cmd,
+            self.values,
+        ) = data
 
     def __repr__(self):
         return f'<{self.cmd} {" ".join( i for i in self.values)}>'
@@ -117,11 +117,7 @@ got {num_of_val} instead'
 class MathStatement(Statement):
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         (
             self._a,
             self._b,
@@ -166,11 +162,7 @@ class COPY(Statement):
     _exp_val = 2
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         (
             self._from,
             self._to,
@@ -207,11 +199,7 @@ class TEST(Statement):
     }
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         (
             self._a,
             self._eval,
@@ -235,11 +223,7 @@ class MARK(Statement):
     _exp_val = 1
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         self._label = self.values[0]
 
     def do(self, state):
@@ -252,11 +236,7 @@ class JUMP(Statement):
     _exp_val = 1
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         self._label = self.values[-1]
 
     def do(self, state):
@@ -284,11 +264,7 @@ class FILE(Statement):
     _exp_val = 1
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         self.reg = self.values[0]
 
     def do(self, state):
@@ -313,8 +289,6 @@ class DROP(Statement):
 
 
 class Parser:
-    """ Parse file and check data
-    """
 
     def __init__(self, file):
 
@@ -336,18 +310,18 @@ class Parser:
         if command not in COMMANDS:
             error = f"'{command}' in line {line} of {self.file} \
 is not a recognized EXA command"
-            raise ExaError(error)
+            raise EXAError(error)
         return command
 
     def _check_register(self, line, vals):
+        if len(vals) == 1:
+            return vals
         for val in vals:
-            if len(vals) == 1:
-                break
-            elif val not in REGISTERS and not val.isdigit() \
+            if val not in REGISTERS and not val.isdigit() \
                     and val not in TEST.OPS.keys():
                 error = f"'{val}' in line {line} of {self.file} \
 is not a valid exa register or value"
-                raise ExaError(error)
+                raise EXAError(error)
         return vals
 
 
@@ -357,22 +331,19 @@ class Interpreter:
 
     def __init__(self, filename):
         self.filename = filename
+        self.state = State()
+
 
     def run(self):
-
-        state = State()
-        p = Parser(self.filename)
-
-        # Match second param to subclass and pass appropriate 'data' as args.
-        program = [self._commands[data[1]](data) for data in p.code]
+        parsed = Parser(self.filename)
+        program = [self._commands[data[1]](data) for data in parsed.code]
 
         lines = len(program)
 
         while True:
-            if state._next_statement == lines:
+            if self.state._next_statement == lines:
                 break
+            stmt = program[self.state._next_statement]
+            stmt.do(self.state)
 
-            stmt = program[state._next_statement]
-            stmt.do(state)
-
-        return state
+        return self.state
