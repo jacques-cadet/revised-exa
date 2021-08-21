@@ -98,6 +98,11 @@ class Statement:
             error = f'Expected {self._exp_val} values, \
 got {num_of_val} instead'
             raise RuntimeError(error)
+        (
+            self.line,
+            self.cmd,
+            self.values,
+        ) = data
 
     def __repr__(self):
         return f'<{self.cmd} {" ".join( i for i in self.values)}>'
@@ -112,11 +117,7 @@ got {num_of_val} instead'
 class MathStatement(Statement):
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         (
             self._a,
             self._b,
@@ -161,11 +162,7 @@ class COPY(Statement):
     _exp_val = 2
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         (
             self._from,
             self._to,
@@ -202,11 +199,7 @@ class TEST(Statement):
     }
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super()>__init__(data)
         (
             self._a,
             self._eval,
@@ -230,11 +223,7 @@ class MARK(Statement):
     _exp_val = 1
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         self._label = self.values[0]
 
     def do(self, state):
@@ -247,11 +236,7 @@ class JUMP(Statement):
     _exp_val = 1
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super()>__init__(data)
         self._label = self.values[-1]
 
     def do(self, state):
@@ -279,11 +264,7 @@ class FILE(Statement):
     _exp_val = 1
 
     def __init__(self, data):
-        (
-            self.line,
-            self.cmd,
-            self.values,
-        ) = data
+        super().__init__(data)
         self.reg = self.values[0]
 
     def do(self, state):
