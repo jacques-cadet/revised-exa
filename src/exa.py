@@ -1,7 +1,4 @@
-
-# import os
 import operator as ops
-
 
 FILES = {
     '100': list(range(1, 20)),
@@ -313,8 +310,7 @@ class DROP(Statement):
 
 
 class Parser:
-    """ Parse file and check data
-    """
+    """ Parse file and check data"""
 
     def __init__(self, file):
 
@@ -336,18 +332,18 @@ class Parser:
         if command not in COMMANDS:
             error = f"'{command}' in line {line} of {self.file} \
 is not a recognized EXA command"
-            raise ExaError(error)
+            raise EXAError(error)
         return command
 
     def _check_register(self, line, vals):
+        if len(vals) == 1:
+            return vals
         for val in vals:
-            if len(vals) == 1:
-                break
-            elif val not in REGISTERS and not val.isdigit() \
+            if val not in REGISTERS and not val.isdigit() \
                     and val not in TEST.OPS.keys():
                 error = f"'{val}' in line {line} of {self.file} \
 is not a valid exa register or value"
-                raise ExaError(error)
+                raise EXAError(error)
         return vals
 
 
