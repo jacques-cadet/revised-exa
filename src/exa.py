@@ -236,7 +236,7 @@ class JUMP(Statement):
     _exp_val = 1
 
     def __init__(self, data):
-        super()>__init__(data)
+        super().__init__(data)
         self._label = self.values[-1]
 
     def do(self, state):
