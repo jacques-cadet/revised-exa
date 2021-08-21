@@ -334,11 +334,9 @@ class Interpreter:
         self.filename = filename
 
     def run(self):
-
         state = State()
         p = Parser(self.filename)
 
-        # Match second param to subclass and pass appropriate 'data' as args.
         program = [self._commands[data[1]](data) for data in p.code]
 
         lines = len(program)
