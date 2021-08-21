@@ -39,8 +39,6 @@ class EXAError(SyntaxError):
 
 
 class State:
-    """ Return the state of the EXA registers
-    """
 
     def __init__(self):
 
