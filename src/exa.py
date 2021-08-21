@@ -41,7 +41,6 @@ class EXAError(SyntaxError):
 class State:
 
     def __init__(self):
-
         self._registry = {
             register: 0 for register in REGISTERS
         }
@@ -55,7 +54,7 @@ class State:
 
     def __repr__(self):
         return f"<Registers: T = {self.T:5,} | X = {self.X:5,}>"
- 
+
     def store(self, register, value):
         self._registry[register] = value
 
@@ -125,7 +124,6 @@ class MathStatement(Statement):
         ) = self.values
 
     def do(self, state):
-
         a = state.get_value(self._a, self.line)
         b = state.get_value(self._b, self.line)
         state.store(self._to, self.exe(a, b))
@@ -291,7 +289,6 @@ class DROP(Statement):
 class Parser:
 
     def __init__(self, file):
-
         self.file = file
         self.code = self.parse()
 
@@ -332,7 +329,6 @@ class Interpreter:
     def __init__(self, filename):
         self.filename = filename
         self.state = State()
-
 
     def run(self):
         parsed = Parser(self.filename)
