@@ -29,5 +29,5 @@ if __name__ == '__main__':
         subprocess.run('cls')
     finally:
         pass
-
-    print(result)
+    
+    print(file, '\n', result)
