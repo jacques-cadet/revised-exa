@@ -9,7 +9,6 @@ def main():
     return program.run()
 
 
-
 if __name__ == '__main__':
 
     files = [file for file in os.listdir() if file.endswith('.exa')]
