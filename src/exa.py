@@ -1,4 +1,6 @@
 import operator as ops
+import os
+import logging
 
 FILES = {
     '100': list(range(1, 20)),
@@ -335,3 +337,25 @@ class Interpreter:
             stmt.do(self.state)
 
         return self.state
+
+
+def set_logging(filename=None):
+    logger = logging.getLogger()
+    formatter = logging.Formatter(
+        '%(asctime)8s %(name)12s %(levelname)-8s %(message)s')
+    if filename:
+        try:
+            os.mkdir('logs')
+        except FileExistsError:
+            pass
+    handlers = [
+        logging.FileHandler(f'logs/{filename}.log'),
+        logging.StreamHandler(),
+    ] if filename else [logging.StreamHandler()]
+
+    for handler in handlers:
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+
+    return logger
