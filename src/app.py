@@ -10,7 +10,7 @@ def main(file):
     return program.run()
 
 
-def set_logging():
+def set_logging(filename='__file__'):
     try:
         os.mkdir('logs')
     except FileExistsError:
@@ -19,15 +19,14 @@ def set_logging():
     formatter = logging.Formatter(
         '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
     handlers = [
-        logging.FileHandler('logs/exa.log'),
+        logging.FileHandler(f'logs/{filename}.log'),
         logging.StreamHandler(),
     ]
-    
+
     for handler in handlers:
         handler.setFormatter(formatter)
         logger.addHandler(handler)
     logger.setLevel(logging.INFO)
-
 
     return logger
 
@@ -44,7 +43,8 @@ if __name__ == '__main__':
     file = int(input('\n File No.> '))
     file = files[file-1]
     result = main(file)
-    logger = set_logging()
+
+    logger = set_logging('exa')
 
     try:
         subprocess.run('clear')
