@@ -15,7 +15,6 @@ def set_logging(filename='__file__'):
         os.mkdir('logs')
     except FileExistsError:
         pass
-
     logger = logging.getLogger()
     formatter = logging.Formatter(
         '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
@@ -44,6 +43,7 @@ if __name__ == '__main__':
     file = int(input('\n File No.> '))
     file = files[file-1]
     result = main(file)
+
     logger = set_logging('exa')
 
     try:
