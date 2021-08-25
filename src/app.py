@@ -22,7 +22,7 @@ if __name__ == '__main__':
     FILE = files[file-1]
     result = main()
 
-    logger = set_logging()
+    logger = set_logging('EXA', 'logs', 'exa')
 
     try:
         subprocess.run('clear')
@@ -30,5 +30,5 @@ if __name__ == '__main__':
         logger.info(e)
         subprocess.run('cls')
     finally:
-        logger.info(f"EXA[{FILE}] - OK")
+        logger.info(f"{FILE} - OK")
         print(result)
