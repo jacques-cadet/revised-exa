@@ -45,6 +45,10 @@ if __name__ == '__main__':
     file = int(input('\n File No.> '))
     file = files[file-1]
     result = main(file)
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 3de81009cdfa85dd39ab780569947c739b9b8335
     logger = set_logging()
 
     try:
