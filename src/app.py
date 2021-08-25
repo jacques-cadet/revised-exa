@@ -1,35 +1,12 @@
 #!/usr/bin/env python3
 import os
-import logging
 import subprocess
-from exa import Interpreter
+from exa import Interpreter, set_logging
 
 
 def main(file):
     program = Interpreter(file)
     return program.run()
-
-
-def set_logging(filename=None):
-    logger = logging.getLogger()
-    formatter = logging.Formatter(
-        '%(asctime)8s %(name)12s %(levelname)-8s %(message)s')
-    if filename:
-        try:
-            os.mkdir('logs')
-        except FileExistsError:
-            pass
-    handlers = [
-        logging.FileHandler(f'logs/{filename}.log'),
-        logging.StreamHandler(),
-    ] if filename else [logging.StreamHandler()]
-
-    for handler in handlers:
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
-
-    return logger
 
 
 if __name__ == '__main__':
@@ -53,4 +30,5 @@ if __name__ == '__main__':
         logger.info(e)
         subprocess.run('cls')
     finally:
-        logger.info(f"{file} - OK \n{result}")
+        logger.info(f"{file} - OK")
+        print(result)
