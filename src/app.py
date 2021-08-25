@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import logging
 import subprocess
 from exa import Interpreter
 
@@ -7,6 +8,28 @@ from exa import Interpreter
 def main(file):
     program = Interpreter(file)
     return program.run()
+
+
+def set_logging(filename='__file__'):
+    try:
+        os.mkdir('logs')
+    except FileExistsError:
+        pass
+
+    logger = logging.getLogger()
+    formatter = logging.Formatter(
+        '%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+    handlers = [
+        logging.FileHandler(f'logs/{filename}.log'),
+        logging.StreamHandler(),
+    ]
+
+    for handler in handlers:
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+
+    return logger
 
 
 if __name__ == '__main__':
@@ -21,13 +44,14 @@ if __name__ == '__main__':
     file = int(input('\n File No.> '))
     file = files[file-1]
     result = main(file)
+    logger = set_logging('exa')
 
     try:
         subprocess.run('clear')
     except Exception as e:
-        # will log e later
+        logger.info(e)
         subprocess.run('cls')
     finally:
         pass
-    
-    print(file, '\n', result)
+    logger.info(f"{file} - OK")
+    print(result)
