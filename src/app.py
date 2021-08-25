@@ -4,9 +4,10 @@ import subprocess
 from exa import Interpreter, set_logging
 
 
-def main(file):
-    program = Interpreter(file)
+def main():
+    program = Interpreter(FILE)
     return program.run()
+
 
 
 if __name__ == '__main__':
@@ -19,9 +20,9 @@ if __name__ == '__main__':
         print(index, file)
 
     file = int(input('\n File No.> '))
-    file = files[file-1]
-    result = main(file)
-    
+    FILE = files[file-1]
+    result = main()
+
     logger = set_logging()
 
     try:
@@ -30,5 +31,5 @@ if __name__ == '__main__':
         logger.info(e)
         subprocess.run('cls')
     finally:
-        logger.info(f"{file} - OK")
+        logger.info(f"{FILE} - OK")
         print(result)
