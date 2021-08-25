@@ -5,8 +5,8 @@ from exa import Interpreter
 
 
 def main(file):
-    p = Interpreter(file)
-    return p.run()
+    program = Interpreter(file)
+    return program.run()
 
 
 if __name__ == '__main__':
