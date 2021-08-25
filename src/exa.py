@@ -291,7 +291,7 @@ class Parser:
                 [
                     idx+1,
                     self._check_command(idx+1, line.strip().split()[0]),
-                    self._check_register(idx+1, line.strip().split()[1:]),
+                    self._check_register(idx+1, line.strip().split()[1:])
                 ] for idx, line in enumerate(data)
                 if line.strip().split()[0] != 'NOTE'
             ]
