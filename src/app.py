@@ -30,5 +30,5 @@ if __name__ == '__main__':
         logger.info(e)
         subprocess.run('cls')
     finally:
-        logger.info(f"{FILE} - OK")
+        logger.info(f"EXA[{FILE}] - OK")
         print(result)
