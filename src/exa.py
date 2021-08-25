@@ -348,16 +348,16 @@ def set_logging(logger_name, log_dirname=None, filename=None):
             pass
     if filename:
         file_formatter = logging.Formatter(
-            '%(asctime)s %(name)6s %(levelname)s %(message)14s')
+            '[%(asctime)s] [%(name)s %(levelname)s] %(message)14s')
         file_handler = logging.FileHandler(
             f'{log_dirname}/{filename}.log'
-            )if log_dirname else logging.FileHandler(
-                f'{filename}.log')
+        )if log_dirname else logging.FileHandler(
+            f'{filename}.log')
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
 
     stream_formatter = logging.Formatter(
-            '%(asctime)s %(message)12s')
+        '[%(asctime)s] %(message)12s')
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(stream_formatter)
     logger.addHandler(stream_handler)
