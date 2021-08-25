@@ -53,5 +53,4 @@ if __name__ == '__main__':
         logger.info(e)
         subprocess.run('cls')
     finally:
-        pass
-    logger.info(f"{file} - OK \n{result}")
+        logger.info(f"{file} - OK \n{result}")
