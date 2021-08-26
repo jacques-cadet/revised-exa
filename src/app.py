@@ -15,19 +15,18 @@ if __name__ == '__main__':
     files.sort()
 
     for index, file in enumerate(files):
-        index += 1
-        print(index, file)
+        # index += 1
+        print(index+1, file)
 
     file = int(input('\n File No.> '))
     FILE = files[file-1]
     result = main()
 
     logger = set_logging('EXA', 'logs', 'exa')
-
     try:
         subprocess.run('clear')
     except Exception as e:
-        logger.info(e)
+        logger.warning(e)
         subprocess.run('cls')
     finally:
         logger.info(f"{FILE} - OK")

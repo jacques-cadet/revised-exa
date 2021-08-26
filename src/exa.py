@@ -357,7 +357,7 @@ def set_logging(logger_name, log_dirname=None, filename=None):
         logger.addHandler(file_handler)
 
     stream_formatter = logging.Formatter(
-        '[%(asctime)s] %(message)12s')
+        '[%(asctime)s] [%(name)s %(levelname)s] %(message)12s')
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(stream_formatter)
     logger.addHandler(stream_handler)
