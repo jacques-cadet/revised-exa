@@ -28,6 +28,7 @@ COMMANDS = [
 
 ]
 
+
 REGISTERS = [
     'X',
     'T',
@@ -186,7 +187,7 @@ class GT:
 
 
 class TEST(Statement):
-    _exp_val = 3
+    """ Evaluate register values given a specific operation. """
 
     OPS = {
         '=': EQ,
@@ -215,6 +216,7 @@ class TEST(Statement):
 
 
 class MARK(Statement):
+    """ Set labeled line. """
     _exp_val = 1
 
     def __init__(self, data):
@@ -227,6 +229,7 @@ class MARK(Statement):
 
 
 class JUMP(Statement):
+    """ Facilitate conditional navigation. """
     _exp_val = 1
 
     def __init__(self, data):
@@ -239,6 +242,10 @@ class JUMP(Statement):
 
 
 class TJMP(JUMP):
+    """ 
+    If the T register is in a 'True' state, 
+    jump to the labeled line.
+    """
     def do(self, state):
         if state.T:
             super().do(state)
@@ -247,6 +254,10 @@ class TJMP(JUMP):
 
 
 class FJMP(JUMP):
+    """ 
+    If the T register is in a 'False' state, 
+    jump to the labeled line.
+    """
     def do(self, state):
         if not state.T:
             super().do(state)
@@ -283,6 +294,7 @@ class DROP(Statement):
 
 
 class Parser:
+    """ Parse program for syntax errors and return executable code """
     def __init__(self, file):
         self.file = file
         self.code = self.parse()
@@ -303,6 +315,7 @@ class Parser:
             error = f"'{command}' in line {line} of {self.file} \
 is not a recognized EXA command"
             raise EXAError(error)
+
         return command
 
     def _check_register(self, line, vals):
@@ -318,6 +331,7 @@ is not a valid exa register or value"
 
 
 class Interpreter:
+    """Parsed code read and executed"""
     _commands = {cmd: eval(cmd) for cmd in COMMANDS}
 
     def __init__(self, filename):
@@ -339,28 +353,51 @@ class Interpreter:
         return self.state
 
 
-def set_logging(logger_name, log_dirname=None, filename=None):
-    logger = logging.getLogger(logger_name)
-    if log_dirname:
-        try:
-            os.mkdir(log_dirname)
-        except FileExistsError:
-            pass
-    if filename:
+class Log:
+    """Automatically creates log directory if provided"""
+    def __init__(
+        self,
+        name=None,
+        log_dir=None,
+        log_file=None
+    ):
+
+        self.log_dir = log_dir
+        self.log_file = log_file
+        self.__logger = logging.getLogger(name)
+        self.__logger.setLevel(logging.INFO)
+        if log_dir and log_dir not in os.listdir():
+            os.mkdir(self.log_dir)
+        if log_file:
+            self.__logger.addHandler(self.filer)
+        self.__logger.addHandler(self.streamer)
+
+    @property
+    def log(self):
+        return self.__logger
+
+    @property
+    def filer(self):
+        """
+        Decides whether or not the log files are
+        in a folder
+        """
         file_formatter = logging.Formatter(
             '[%(asctime)s] [%(name)s %(levelname)s] %(message)14s')
-        file_handler = logging.FileHandler(
-            f'{log_dirname}/{filename}.log'
-        )if log_dirname else logging.FileHandler(
-            f'{filename}.log')
-        file_handler.setFormatter(file_formatter)
-        logger.addHandler(file_handler)
 
-    stream_formatter = logging.Formatter(
-        '[%(asctime)s] [%(name)s %(levelname)s] %(message)12s')
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(stream_formatter)
-    logger.addHandler(stream_handler)
-    logger.setLevel(logging.INFO)
+        handler = logging.FileHandler(
+            f'{self.log_dir}/{self.log_file}.log'
+        )if self.log_dir else logging.FileHandler(f'{self.log_file}.log')
 
-    return logger
+        handler.setFormatter(file_formatter)
+
+        return handler
+
+    @property
+    def streamer(self):
+        """Output log to console"""
+        stream_formatter = logging.Formatter(
+            '[%(asctime)s] [%(name)s %(levelname)s] %(message)12s')
+        handler = logging.StreamHandler()
+        handler.setFormatter(stream_formatter)
+        return handler
