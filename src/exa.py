@@ -76,9 +76,6 @@ class State:
             return self._registry[val]
         else:
             val = int(val)
-            if not -9999 <= val <= 9999:
-                error = f'Integer {val} out of range [-9999, 9999]'
-                raise RuntimeError(error)
             return val
 
     def set_label(self, label, line):
